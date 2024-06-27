@@ -22,6 +22,18 @@ export default async function handler(req: any, res: any) {
     } catch (error) {
       res.status(500).json({ error: "Error creating user" });
     }
+  }
+  if (req.method === "GET") {
+    try {
+      await client.connect(); //to connect to the mongodb server
+      const database = client.db("JobKhoj"); // Replace with your database name
+      const Jobs = database.collection("Jobs"); // Replace with your collection name
+
+      const jobs = await Jobs.find({}).toArray();
+      res.status(200).json(jobs);
+    } catch (error) {
+      res.status(500).json({ error: "Error fetching jobs" });
+    }
   } else {
     res.status(405).json({ message: "Method not allowed" });
   }

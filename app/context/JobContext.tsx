@@ -1,7 +1,12 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import JobRow from "./JobRow";
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
+// Define TypeScript interface for Job
 interface Job {
   _id: string;
   companyName: string;
@@ -17,7 +22,29 @@ interface Job {
   recruiterEmail: string;
 }
 
-const Jobs = () => {
+// Define context type
+interface JobContextType {
+  jobs: Job[];
+  loading: boolean;
+  error: string | null;
+}
+
+// Create context
+const JobContext = createContext<JobContextType>({
+  jobs: [],
+  loading: true,
+  error: null,
+});
+
+interface JobProviderProps {
+  children: ReactNode;
+}
+
+// Custom hook to use the context
+export const useJobContext = () => useContext(JobContext);
+
+// Provider component
+export const JobProvider: React.FC<JobProviderProps> = ({ children }) => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -42,15 +69,8 @@ const Jobs = () => {
   }, []);
 
   return (
-    <div className="bg-stone-100 px-2 sm:px-8 py-4">
-      <h3 className="text-lg font-medium text-gray-600 text-center sm:text-left">
-        Recent Jobs
-      </h3>
-      {jobs.map((job) => (
-        <JobRow key={job._id} job={job} />
-      ))}
-    </div>
+    <JobContext.Provider value={{ jobs, loading, error }}>
+      {children}
+    </JobContext.Provider>
   );
 };
-
-export default Jobs;
