@@ -1,21 +1,27 @@
 require("dotenv").config();
 const express = require("express");
+const router = express.Router();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
 const app = express();
+
+router.use(express.json());
+
 const PORT = process.env.PORT || 4000;
 
 app.use(bodyParser.json());
 app.use(cors());
 
 // MongoDB connection
-const mongoURI = process.env.MONGODB_URI;
-console.log(process.env.MONGODB_URI);
+// const mongoURI =
+//   "mongodb+srv://sudeep:sudeep10@jobportal.behhjik.mongodb.net/?appName=JobPortal";
 
 mongoose
-  .connect(mongoURI)
+  .connect(
+    "mongodb+srv://sudeep:sudeep10@jobportal.behhjik.mongodb.net/?retryWrites=true&w=majority&appName=JobPortal"
+  )
   .then(() => console.log("MongoDB connected successfully"))
   .catch((error) => console.log("Error: ", error.message));
 

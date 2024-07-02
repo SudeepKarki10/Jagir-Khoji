@@ -1,21 +1,31 @@
 const express = require("express");
 const router = express.Router();
+const JobCollection = require("../models/job");
 
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
 router.post("/", async (req, res) => {
   try {
     const jobData = req.body;
-    // Save jobData to the database or perform necessary actions
-    res.status(200).json({ success: true, data: jobData });
+    if (jobData) {
+      const JobDetails = await JobCollection.insertMany(jobData);
+      res
+        .status(200)
+        .json({ message: "Job created successfully", data: JobDetails });
+    } else {
+      res.status(400).json({ message: "Invalid job data", data: jobData });
+    }
   } catch (error) {
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 });
 
-router.get("/new-listing", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    res.status(200).json({ msg: "Hello from sudeep" });
+    const jobs = await Job.find();
+    res.status(200).json(jobs);
   } catch (error) {
-    res.status(500).json({ success: false, error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error: " + error.message });
   }
 });
 
