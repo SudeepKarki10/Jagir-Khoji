@@ -20,7 +20,7 @@ app.use(cors());
 
 mongoose
   .connect(
-    "mongodb+srv://sudeep:sudeep10@jobportal.behhjik.mongodb.net/?retryWrites=true&w=majority&appName=JobPortal"
+    "mongodb+srv://sudeep:sudeep10@jobportal.behhjik.mongodb.net/JagirKhojiDB?retryWrites=true&w=majority&appName=JobPortal"
   )
   .then(() => console.log("MongoDB connected successfully"))
   .catch((error) => console.log("Error: ", error.message));
@@ -29,15 +29,14 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-const jobsRoute = require("./routes/new-listingAPI");
+const jobsListingRoute = require("./routes/new-listingAPI");
 
 //app.use with first parameter new-listing means that all the request from /new-listing wil be handled by jobsRoute module
-app.use("/new-listing", jobsRoute);
+app.use("/new-listing", jobsListingRoute);
 
-// app.get("/", (req, res) => {
-//   res.send("Hello from the backend!");
-// });
+const userpostedJobsRoute = require("./routes/postedjobsAPI");
 
-// app.get("/api/getjobs", (req, res) => {
-//   res.send({ msg: "Hello from nodejs " });
-// });
+app.use("/user/postedjobs", userpostedJobsRoute);
+
+const UserLoginSignupRoute = require("./routes/userRoutes");
+app.use("/api", UserLoginSignupRoute);
