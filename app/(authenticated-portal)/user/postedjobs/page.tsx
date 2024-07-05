@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import JobRow from "./JobRow";
+import JobRow from "../../../components/JobRow";
 
 interface Job {
   _id: string;
@@ -43,9 +43,9 @@ const Jobs = () => {
   }, []);
 
   return (
-    <div className="bg-stone-100 px-2 sm:px-8 py-4">
+    <div className="bg-stone-100 px-2 sm:px-8 py-4 mt-10 sm:mt-32 md:mt-60">
       <h3 className="text-lg font-medium text-gray-600 text-center sm:text-left">
-        Recent Jobs
+        Posted Jobs
       </h3>
       {jobs.map((job) => (
         <JobRow key={job._id} job={job} />

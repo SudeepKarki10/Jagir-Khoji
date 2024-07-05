@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Fallbackimg from "../../public/fallback.png";
 
 interface Props {
   job: {
@@ -20,7 +21,10 @@ interface Props {
 }
 
 const JobRow: React.FC<Props> = ({ job }) => {
-  const truncateDescription = (text: string, maxLength: number) => {
+  const truncateDescription = (text: string | undefined, maxLength: number) => {
+    if (!text) {
+      return "";
+    }
     if (text.length > maxLength) {
       return text.substr(0, maxLength) + "...";
     }
@@ -32,13 +36,23 @@ const JobRow: React.FC<Props> = ({ job }) => {
     <Link href={`{/job/${job._id}}`}>
       <div className="flex flex-col md:flex-row gap-4  rounded-lg border py-4 text-gray-700 shadow transition hover:shadow-lg mx-2  bg-white grow pl-2 mt-6">
         <div className="flex items-center justify-center relative h-40 md:h-40 w-full  md:w-1/4  rounded-sm ">
-          <Image
-            src={`${job.companylogoURL}`}
-            layout="fill" // Ensures the image fills the dimensions of its parent container
-            objectFit="cover" // Ensures the image covers the entire container while maintaining aspect ratio
-            alt="company logo"
-            className="object-cover"
-          />
+          {job.companylogoURL ? (
+            <Image
+              src={job.companylogoURL}
+              layout="fill"
+              objectFit="cover"
+              alt="company logo"
+              className="object-cover"
+            />
+          ) : (
+            <Image
+              src={Fallbackimg}
+              layout="fill"
+              objectFit="cover"
+              alt="fallback logo"
+              className="object-cover"
+            />
+          )}
         </div>
 
         <div className=" flex flex-col pr-0 sm:pr-8 text-left pl-0 sm:pl-4 grow  w-full md:w-8/12 ">

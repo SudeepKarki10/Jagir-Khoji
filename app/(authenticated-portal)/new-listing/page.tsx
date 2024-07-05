@@ -37,33 +37,32 @@ export default function NewListingPage() {
   const onSubmit = async (data: Inputs) => {
     console.log(data);
     const formData = {
-      ...data, // Spread the form data
+      ...data,
       companylogoURL: companylogoURL,
       userprofileURL: userprofileURL,
     };
 
     console.log(formData);
     try {
-      const response = await fetch("/api/jobs", {
+      const response = await fetch("http://localhost:4000/new-listing", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-
       if (response.ok) {
         const result = await response.json();
-        console.log("Job data saved successfully:", result);
-        toast("Success Notification !");
-        reset(); //to reset the form data
-        router.push("/");
+        console.log("Job data saved :", result);
+        alert("Job data saved ");
+        //reset(); // to reset the form data
+        router.push("/new-listing");
       } else {
         const errorData = await response.json();
         console.error("Error saving job data:", errorData.error);
       }
-    } catch (error) {
-      console.error("Error submitting form:", error);
+    } catch (error: any) {
+      console.error("Error submitting form:", error.message);
     }
   };
 
@@ -190,7 +189,7 @@ export default function NewListingPage() {
               "
             >
               <option value="Full">Full-time</option>
-              <option value="Part time">Part-time</option>
+              <option value="Part">Part-time</option>
             </select>
             {errors.jobTiming && (
               <span className="text-red-500">Job Timing is required</span>
@@ -203,7 +202,7 @@ export default function NewListingPage() {
             <textarea
               {...register("positionDescription", {
                 required: true,
-                maxLength: 400,
+                maxLength: 5000,
               })}
               className="
                 block
@@ -218,7 +217,13 @@ export default function NewListingPage() {
                 focus:ring-opacity-50
               "
               rows={3}
-              placeholder="The job is about..."
+              placeholder="Tips: Provide a summary of the role, what success in the position looks like, and how this role fits into the organization overall.
+              Responsibilities
+              [Be specific when describing each of the responsibilities. Use gender-neutral, inclusive language.]
+              
+              Example: Determine and develop user requirements for systems in production, to ensure maximum usability
+              Qualifications
+              [Some qualifications you may want to include are Skills, Education, Experience, or Certifications.]Example: Excellent verbal and written communication sfasfkills"
             />
           </label>
           <div className="w-full flex flex-col md:flex-row gap-28">
